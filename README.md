@@ -21,7 +21,7 @@
 
 **Travel Plan** is a cross-platform Flutter app that turns a few inputs (where from, where to, how many days, budget, vehicle and interests) into a **complete AI-generated road trip**: route stops, tourist spots, hotels, fuel/EV-charging stops, a cost estimate and safety tips. It also gives live weather along the route, an expense tracker with charts, a packing checklist and a budget splitter for group trips. Each user's plans and expenses are saved to Firebase.
 
-> ✅ **Live:** download the APK, log in with the demo account, and the AI planner, weather, login and database all work out of the box.
+> ✅ **Live now:** [**Download the Android APK**](https://github.com/nvaltryek-001/Travel_Plan/releases/latest/download/TravelPlan.apk) or open the [**web app**](https://nvaltryek-001.github.io/Travel_Plan/) — log in with the demo account below and the AI planner, weather, login and database all work out of the box.
 
 ### 📑 Contents
 [Download](#-download--try) · [Demo](#-app-demo) · [Screenshots](#-screenshots) · [How it works](#️-how-the-app-works) · [Features](#-features) · [Tech stack](#️-tech-stack) · [Setup](#️-setup--run) · [Demo login](#-demo-login)
