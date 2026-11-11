@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'config.dart';
-import 'screens/splash_screen.dart';
 import 'screens/packing_checklist_screen.dart';
 import 'screens/budget_splitter_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,32 +31,37 @@ import 'expenses_history_screen.dart';
 // 🔹 NEW: Import for Trip Suggestions screen
 import 'trip_suggestions_screen.dart';
 
-// --- Initialize Firebase in main() ---
+// --- App entry point ---
+// We render the UI immediately and initialise Firebase inside a gate widget,
+// so the app always shows something (an animated splash, then the app, or a
+// readable error) instead of a blank white screen if Firebase has trouble.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    if (AppConfig.hasFirebase) {
-      await Firebase.initializeApp(
-        options: FirebaseOptions(
-          apiKey: AppConfig.firebaseApiKey,
-          appId: AppConfig.firebaseAppId,
-          messagingSenderId: AppConfig.firebaseSenderId,
-          projectId: AppConfig.firebaseProjectId,
-          authDomain: AppConfig.firebaseAuthDomain.isEmpty
-              ? null
-              : AppConfig.firebaseAuthDomain,
-          storageBucket: AppConfig.firebaseStorageBucket.isEmpty
-              ? null
-              : AppConfig.firebaseStorageBucket,
-        ),
-      );
-    } else {
-      await Firebase.initializeApp();
-    }
-  } catch (e) {
-    print('Error initializing Firebase: $e');
-  }
   runApp(const MyApp());
+}
+
+/// Initialises Firebase once and caches the result.
+Future<FirebaseApp> initializeFirebase() {
+  if (Firebase.apps.isNotEmpty) {
+    return Future.value(Firebase.apps.first);
+  }
+  if (AppConfig.hasFirebase) {
+    return Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: AppConfig.firebaseApiKey,
+        appId: AppConfig.firebaseAppId,
+        messagingSenderId: AppConfig.firebaseSenderId,
+        projectId: AppConfig.firebaseProjectId,
+        authDomain: AppConfig.firebaseAuthDomain.isEmpty
+            ? null
+            : AppConfig.firebaseAuthDomain,
+        storageBucket: AppConfig.firebaseStorageBucket.isEmpty
+            ? null
+            : AppConfig.firebaseStorageBucket,
+      ),
+    );
+  }
+  return Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -71,14 +75,22 @@ class MyApp extends StatelessWidget {
       brightness: brightness,
     );
     final base = ThemeData(useMaterial3: true, colorScheme: scheme);
+    // Poppins is fetched at runtime; fall back to the default font if that fails
+    // (e.g. no network on first launch) so the app never fails to build its theme.
+    TextTheme textTheme;
+    try {
+      textTheme = GoogleFonts.poppinsTextTheme(base.textTheme);
+    } catch (_) {
+      textTheme = base.textTheme;
+    }
     return base.copyWith(
-      textTheme: GoogleFonts.poppinsTextTheme(base.textTheme),
+      textTheme: textTheme,
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,
         backgroundColor: scheme.primary,
         foregroundColor: scheme.onPrimary,
-        titleTextStyle: GoogleFonts.poppins(
+        titleTextStyle: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: scheme.onPrimary,
@@ -120,8 +132,156 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
-      home: const SplashScreen(next: AuthWrapper()),
+      home: const StartupGate(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+// --- StartupGate: shows the animated splash while Firebase initialises,
+// then routes to the app, or shows a readable error (never a blank screen). ---
+class StartupGate extends StatefulWidget {
+  const StartupGate({super.key});
+
+  @override
+  State<StartupGate> createState() => _StartupGateState();
+}
+
+class _StartupGateState extends State<StartupGate> {
+  late final Future<void> _startup;
+
+  @override
+  void initState() {
+    super.initState();
+    // Run Firebase init and a minimum splash time together.
+    _startup = Future.wait([
+      initializeFirebase(),
+      Future<void>.delayed(const Duration(milliseconds: 2200)),
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+      future: _startup,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const _SplashView();
+        }
+        if (snapshot.hasError) {
+          return _StartupErrorView(
+            error: snapshot.error.toString(),
+            onRetry: () => setState(() {
+              _startup = Future.wait([
+                initializeFirebase(),
+                Future<void>.delayed(const Duration(milliseconds: 300)),
+              ]);
+            }),
+          );
+        }
+        return const AuthWrapper();
+      },
+    );
+  }
+}
+
+/// Static splash visuals (gradient, logo, spinner) used while initialising.
+class _SplashView extends StatelessWidget {
+  const _SplashView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF4C6FFF), Color(0xFF1E3A8A)],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(28),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.travel_explore,
+                  size: 72, color: Colors.white),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              AppConfig.appName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text('Plan smarter. Travel better.',
+                style: TextStyle(color: Colors.white70)),
+            const SizedBox(height: 40),
+            const SizedBox(
+              width: 26,
+              height: 26,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2.5, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Shown if Firebase fails to initialise — a clear message instead of a blank screen.
+class _StartupErrorView extends StatelessWidget {
+  final String error;
+  final VoidCallback onRetry;
+  const _StartupErrorView({required this.error, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(28),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.cloud_off, size: 64, color: Colors.redAccent),
+              const SizedBox(height: 16),
+              const Text(
+                "Couldn't connect to the server",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Check your internet connection and try again.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                error,
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: onRetry,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

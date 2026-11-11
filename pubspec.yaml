@@ -2,7 +2,7 @@ name: smart_travel_app
 description: "Travel Plan - AI-powered road trip planner with weather, expenses and trip suggestions."
 publish_to: 'none'
 
-version: 2.0.0+2
+version: 2.1.0+3
 
 environment:
   sdk: ^3.9.2
