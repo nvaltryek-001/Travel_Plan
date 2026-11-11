@@ -35,7 +35,24 @@ import 'trip_suggestions_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp();
+    if (AppConfig.hasFirebase) {
+      await Firebase.initializeApp(
+        options: FirebaseOptions(
+          apiKey: AppConfig.firebaseApiKey,
+          appId: AppConfig.firebaseAppId,
+          messagingSenderId: AppConfig.firebaseSenderId,
+          projectId: AppConfig.firebaseProjectId,
+          authDomain: AppConfig.firebaseAuthDomain.isEmpty
+              ? null
+              : AppConfig.firebaseAuthDomain,
+          storageBucket: AppConfig.firebaseStorageBucket.isEmpty
+              ? null
+              : AppConfig.firebaseStorageBucket,
+        ),
+      );
+    } else {
+      await Firebase.initializeApp();
+    }
   } catch (e) {
     print('Error initializing Firebase: $e');
   }

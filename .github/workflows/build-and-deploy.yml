@@ -1,0 +1,98 @@
+name: Build APK & Deploy Web
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Create env.json from repository secrets
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          keys = ["GEMINI_API_KEY","OPENWEATHER_API_KEY","FIREBASE_API_KEY","FIREBASE_APP_ID",
+                  "FIREBASE_MESSAGING_SENDER_ID","FIREBASE_PROJECT_ID","FIREBASE_AUTH_DOMAIN","FIREBASE_STORAGE_BUCKET"]
+          json.dump({k: os.environ.get(k, "") for k in keys}, open("env.json", "w"))
+          print("Configured:", [k for k in keys if os.environ.get(k)])
+          PY
+
+      - run: flutter pub get
+
+      - name: Analyze (non-blocking)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
+
+      - name: Test
+        run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --release --dart-define-from-file=env.json
+
+      - name: Build Web
+        run: flutter build web --release --base-href /Travel_Plan/ --dart-define-from-file=env.json
+
+      - name: Rename APK
+        run: cp build/app/outputs/flutter-apk/app-release.apk TravelPlan.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TravelPlan-apk
+          path: TravelPlan.apk
+
+      - name: Publish GitHub Release (latest APK)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2.0.${{ github.run_number }}
+          name: Travel Plan v2.0.${{ github.run_number }}
+          make_latest: true
+          files: TravelPlan.apk
+          body: |
+            📱 **Download:** `TravelPlan.apk` below → open on your Android phone → allow "Install unknown apps".
+            🌐 **Web version:** https://nvaltryek-001.github.io/Travel_Plan/
+            Built automatically from commit ${{ github.sha }}.
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy-web:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
