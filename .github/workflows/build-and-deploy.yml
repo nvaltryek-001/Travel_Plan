@@ -46,8 +46,12 @@ jobs:
           import json, os
           keys = ["GEMINI_API_KEY","OPENWEATHER_API_KEY","FIREBASE_API_KEY","FIREBASE_APP_ID",
                   "FIREBASE_MESSAGING_SENDER_ID","FIREBASE_PROJECT_ID","FIREBASE_AUTH_DOMAIN","FIREBASE_STORAGE_BUCKET"]
-          json.dump({k: os.environ.get(k, "") for k in keys}, open("env.json", "w"))
-          print("Configured:", [k for k in keys if os.environ.get(k)])
+          # Only include secrets that are actually set. Empty --dart-define values
+          # would override the Firebase config baked into lib/config.dart, so we
+          # omit unset keys and let those compiled-in defaults apply.
+          data = {k: v for k in keys if (v := os.environ.get(k, "").strip())}
+          json.dump(data, open("env.json", "w"))
+          print("Configured keys:", list(data.keys()))
           PY
 
       - run: flutter pub get
