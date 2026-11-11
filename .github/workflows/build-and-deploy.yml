@@ -81,22 +81,18 @@ jobs:
             🌐 **Web version:** https://nvaltryek-001.github.io/Travel_Plan/
             Built automatically from commit ${{ github.sha }}.
 
-      - name: Build Web (optional)
-        id: web
-        continue-on-error: true
+      # APK is already released above, so a web failure can't block it.
+      - name: Build Web
         run: flutter build web --release --base-href /Travel_Plan/ --dart-define-from-file=env.json
 
       - name: Upload Pages artifact
-        if: steps.web.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
   deploy-web:
     needs: build
-    if: success()
     runs-on: ubuntu-latest
-    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
