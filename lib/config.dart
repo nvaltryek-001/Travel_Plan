@@ -16,17 +16,17 @@ class AppConfig {
   // Firebase (Web app config from Firebase Console -> Project settings).
   // One config works for both the Android APK and the Web build.
   static const String firebaseApiKey =
-      String.fromEnvironment('FIREBASE_API_KEY', defaultValue: '');
+      String.fromEnvironment('FIREBASE_API_KEY', defaultValue: 'AIzaSyDVc6JhWisB6U9Cti8-hT_43yDemiljkUw');
   static const String firebaseAppId =
-      String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '');
+      String.fromEnvironment('FIREBASE_APP_ID', defaultValue: '1:779912072136:web:7f1981aed7cd5b51c34efd');
   static const String firebaseSenderId =
-      String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID', defaultValue: '');
+      String.fromEnvironment('FIREBASE_MESSAGING_SENDER_ID', defaultValue: '779912072136');
   static const String firebaseProjectId =
-      String.fromEnvironment('FIREBASE_PROJECT_ID', defaultValue: '');
+      String.fromEnvironment('FIREBASE_PROJECT_ID', defaultValue: 'travel-plan001');
   static const String firebaseAuthDomain =
-      String.fromEnvironment('FIREBASE_AUTH_DOMAIN', defaultValue: '');
+      String.fromEnvironment('FIREBASE_AUTH_DOMAIN', defaultValue: 'travel-plan001.firebaseapp.com');
   static const String firebaseStorageBucket =
-      String.fromEnvironment('FIREBASE_STORAGE_BUCKET', defaultValue: '');
+      String.fromEnvironment('FIREBASE_STORAGE_BUCKET', defaultValue: 'travel-plan001.firebasestorage.app');
 
   static bool get hasFirebase =>
       firebaseApiKey.isNotEmpty &&
