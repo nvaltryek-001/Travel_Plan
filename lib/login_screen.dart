@@ -138,7 +138,12 @@ class _LoginScreenState extends State<LoginScreen> {
       await user.reload();
       final reloaded = _auth.currentUser;
 
-      if (reloaded != null && reloaded.emailVerified) {
+      // The demo account can sign in without email verification so anyone who
+      // downloads the app can try it immediately. Real accounts still verify.
+      const demoEmail = 'demo.travelplan@gmail.com';
+      final isDemo = (reloaded?.email ?? user.email) == demoEmail;
+
+      if (reloaded != null && (reloaded.emailVerified || isDemo)) {
         await _showMessage('Signed in successfully. Welcome!');
       } else {
         await _auth.signOut();
