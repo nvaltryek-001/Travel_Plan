@@ -253,14 +253,14 @@ flutter test
 
 ## 🔑 Demo Login
 
-Create this account once in **your** Firebase project (in-app **Sign Up**, or *Firebase Console → Authentication → Add user*):
+The app is connected to a live Firebase backend, and a demo account is **ready to use** — just install and log in:
 
 | Field | Value |
 |---|---|
 | 📧 **Email** | `demo.travelplan@gmail.com` |
 | 🔒 **Password** | `Travel@123` |
 
-> If email verification blocks login during a demo, verify the address or add the user from the Firebase Console.
+> Or tap **Sign Up** in the app to create your own account.
 
 ---
 
