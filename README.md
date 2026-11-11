@@ -23,6 +23,28 @@
 
 ---
 
+## 📥 Download & Try
+
+<p align="center">
+  <a href="https://github.com/nvaltryek-001/Travel_Plan/releases/latest/download/TravelPlan.apk"><img src="https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download APK"/></a>
+  &nbsp;
+  <a href="https://nvaltryek-001.github.io/Travel_Plan/"><img src="https://img.shields.io/badge/Open-Live%20Web%20App-4C6FFF?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live web app"/></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/nvaltryek-001/Travel_Plan/actions/workflows/build-and-deploy.yml"><img src="https://github.com/nvaltryek-001/Travel_Plan/actions/workflows/build-and-deploy.yml/badge.svg" alt="Build status"/></a>
+  <a href="https://github.com/nvaltryek-001/Travel_Plan/releases/latest"><img src="https://img.shields.io/github/v/release/nvaltryek-001/Travel_Plan?label=latest%20release" alt="Latest release"/></a>
+</p>
+
+**Install on Android:**
+1. Tap **Download Android APK** above (or open [Releases](https://github.com/nvaltryek-001/Travel_Plan/releases/latest) and download `TravelPlan.apk`).
+2. Open the file on your phone and allow **Install unknown apps** when asked.
+3. Open **Travel Plan**, sign up or use the demo login below, and start planning.
+
+> 🔄 Every push to `main` automatically builds a fresh APK and redeploys the web app with **GitHub Actions** ([workflow](.github/workflows/build-and-deploy.yml)).
+
+---
+
 ## 🎬 App Demo
 
 <p align="center">
@@ -211,7 +233,7 @@ dart pub global activate flutterfire_cli
 flutterfire configure
 ```
 
-**4. Add your API keys**
+**4. Add your API keys** (also add the same names as *GitHub → Settings → Secrets → Actions* so CI builds a working APK)
 ```bash
 cp env.example.json env.json   # put real keys inside (git-ignored)
 ```

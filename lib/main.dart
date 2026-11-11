@@ -1,5 +1,6 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'config.dart';
 import 'screens/splash_screen.dart';
 import 'screens/packing_checklist_screen.dart';
