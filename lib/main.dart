@@ -774,7 +774,7 @@ class _PlanTabState extends State<PlanTab> {
           'Gemini API key missing. Run with --dart-define=GEMINI_API_KEY=your_key');
     }
     final model = GenerativeModel(
-      model: 'gemini-2.5-flash',
+      model: 'gemini-flash-latest',
       apiKey: _apiKey,
     );
 
