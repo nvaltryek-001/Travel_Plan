@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/Firebase-Auth%20%7C%20Firestore-FFCA28?logo=firebase&logoColor=black"/>
   <img src="https://img.shields.io/badge/AI-Gemini%202.5%20Flash-8E75B2?logo=googlegemini&logoColor=white"/>
   <img src="https://img.shields.io/badge/Platforms-Android%20%7C%20iOS%20%7C%20Web-4C6FFF"/>
-  <img src="https://img.shields.io/badge/version-2.0.0-success"/>
+  <a href="https://github.com/nvaltryek-001/Travel_Plan/releases/latest"><img src="https://img.shields.io/github/v/release/nvaltryek-001/Travel_Plan?label=release&color=success"/></a>
 </p>
 
 ---
@@ -20,6 +20,11 @@
 ## 📖 About
 
 **Travel Plan** is a cross-platform Flutter app that turns a few inputs (where from, where to, how many days, budget, vehicle and interests) into a **complete AI-generated road trip**: route stops, tourist spots, hotels, fuel/EV-charging stops, a cost estimate and safety tips. It also gives live weather along the route, an expense tracker with charts, a packing checklist and a budget splitter for group trips. Each user's plans and expenses are saved to Firebase.
+
+> ✅ **Live:** download the APK, log in with the demo account, and the AI planner, weather, login and database all work out of the box.
+
+### 📑 Contents
+[Download](#-download--try) · [Demo](#-app-demo) · [Screenshots](#-screenshots) · [How it works](#️-how-the-app-works) · [Features](#-features) · [Tech stack](#️-tech-stack) · [Setup](#️-setup--run) · [Demo login](#-demo-login)
 
 ---
 
@@ -173,7 +178,7 @@ sequenceDiagram
 - 👥 **Budget Splitter** (`lib/screens/budget_splitter_screen.dart`)
 - 🎨 **Material 3 redesign:** Poppins font, rounded inputs, floating snackbars, Cupertino-style page transitions
 - 🌗 **Dark mode** support
-- 🔒 **No secrets in code:** API keys come in through `--dart-define`; Firebase config is git-ignored
+- 🔒 **Secure keys:** billable keys (Gemini, OpenWeather) are injected via GitHub Secrets / `--dart-define` and never committed; the public Firebase web config is embedded so login works out of the box
 - 🧯 Friendly error when the Gemini key is missing
 - 🏷️ Rebranded to **Travel Plan** on Android, iOS and Web
 - 🧪 Replaced the broken default counter test
