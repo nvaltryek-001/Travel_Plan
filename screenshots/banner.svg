@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4C6FFF"><animate attributeName="stop-color" values="#4C6FFF;#6a5cff;#4C6FFF" dur="6s" repeatCount="indefinite"/></stop>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <style>
+      .t{font:700 46px 'Segoe UI',Poppins,Arial,sans-serif;fill:#fff}
+      .s{font:400 19px 'Segoe UI',Poppins,Arial,sans-serif;fill:#dfe6ff}
+      .fade{opacity:0;animation:in 1s ease forwards}
+      .d2{animation-delay:.6s}
+      @keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+      .car{animation:drive 7s linear infinite}
+      @keyframes drive{from{transform:translateX(-80px)}to{transform:translateX(980px)}}
+      .pin{animation:bob 1.6s ease-in-out infinite;transform-origin:center}
+      @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    </style>
+  </defs>
+  <rect width="900" height="220" rx="22" fill="url(#g)"/>
+  <path d="M0 185 Q 225 160 450 185 T 900 185" stroke="#ffffff55" stroke-width="3" fill="none" stroke-dasharray="14 10"/>
+  <g class="pin"><text x="790" y="120" font-size="58">📍</text></g>
+  <text x="60" y="95" class="t fade">✈️ Travel Plan</text>
+  <text x="62" y="135" class="s fade d2">AI road trip planner · Weather · Expenses · Packing · Budget split</text>
+  <g class="car"><text x="0" y="192" font-size="34">🚗</text></g>
+</svg>

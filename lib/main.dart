@@ -1,6 +1,9 @@
 // main.dart
 import 'package:flutter/material.dart';
 import 'config.dart';
+import 'screens/splash_screen.dart';
+import 'screens/packing_checklist_screen.dart';
+import 'screens/budget_splitter_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert'; // Import for JSON handling
 import 'package:url_launcher/url_launcher.dart';
@@ -99,7 +102,7 @@ class MyApp extends StatelessWidget {
       theme: _buildTheme(Brightness.light),
       darkTheme: _buildTheme(Brightness.dark),
       themeMode: ThemeMode.system,
-      home: const AuthWrapper(),
+      home: const SplashScreen(next: AuthWrapper()),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -210,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 0,
           centerTitle: true,
           title: const Text(
-            "Smart Travel Assistant",
+            "Travel Plan",
             style: TextStyle(
               color: Colors.indigo,
               fontSize: 22,
@@ -296,6 +299,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(color: Colors.indigo),
                 ),
                 onTap: () => _navigateToTab(2, context),
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.checklist, color: Colors.indigo),
+                title: const Text(
+                  'Packing Checklist',
+                  style: TextStyle(color: Colors.indigo),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const PackingChecklistScreen(),
+                  ));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.groups, color: Colors.indigo),
+                title: const Text(
+                  'Budget Splitter',
+                  style: TextStyle(color: Colors.indigo),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const BudgetSplitterScreen(),
+                  ));
+                },
               ),
               const Divider(),
               ExpansionTile(
