@@ -61,9 +61,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release --dart-define-from-file=env.json
 
-      - name: Build Web
-        run: flutter build web --release --base-href /Travel_Plan/ --dart-define-from-file=env.json
-
       - name: Rename APK
         run: cp build/app/outputs/flutter-apk/app-release.apk TravelPlan.apk
 
@@ -84,13 +81,22 @@ jobs:
             🌐 **Web version:** https://nvaltryek-001.github.io/Travel_Plan/
             Built automatically from commit ${{ github.sha }}.
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Build Web (optional)
+        id: web
+        continue-on-error: true
+        run: flutter build web --release --base-href /Travel_Plan/ --dart-define-from-file=env.json
+
+      - name: Upload Pages artifact
+        if: steps.web.outcome == 'success'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
   deploy-web:
     needs: build
+    if: success()
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
