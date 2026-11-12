@@ -276,6 +276,13 @@ The app is connected to a live Firebase backend, and a demo account is **ready t
 - [ ] Multi-currency expense support
 - [ ] Group trips with shared Firestore plans
 
+## 📬 Contact
+
+For anything related to this project — questions, feedback or support:
+
+- 📧 **Email:** nikeshnikesh32431@gmail.com
+- 📱 **Phone:** +91 76766 73303
+
 ## 🙏 Credits
 
 Built on [smart_travel_app](https://github.com/itsvishwasj/smart_travel_app) by **itsvishwasj**, extended with new features, a redesigned UI, dark mode, secure key handling and full documentation.

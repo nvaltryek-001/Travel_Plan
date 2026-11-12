@@ -293,7 +293,7 @@ class _NewFeatureScreenState extends State<NewFeatureScreen> {
       }
 
       final model = GenerativeModel(
-        model: 'gemini-flash-latest',
+        model: 'gemini-flash-lite-latest',
         apiKey: _geminiApiKey,
       );
 
