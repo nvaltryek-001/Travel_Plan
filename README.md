@@ -41,12 +41,16 @@
   <a href="https://github.com/nvaltryek-001/Travel_Plan/releases/latest"><img src="https://img.shields.io/github/v/release/nvaltryek-001/Travel_Plan?label=latest%20release" alt="Latest release"/></a>
 </p>
 
-**Install on Android:**
-1. Tap **Download Android APK** above (or open [Releases](https://github.com/nvaltryek-001/Travel_Plan/releases/latest) and download `TravelPlan.apk`).
-2. Open the file on your phone and allow **Install unknown apps** when asked.
-3. Open **Travel Plan**, sign up or use the demo login below, and start planning.
+> ✅ **Fully working & publicly available — no account or sign-up needed to download.** Anyone can install the APK or open the web app and log in with the demo account. The AI planner, login, database, weather and expenses are all live and tested.
 
-> 🔄 Every push to `main` automatically builds a fresh APK and redeploys the web app with **GitHub Actions** ([workflow](.github/workflows/build-and-deploy.yml)).
+**📲 Install on Android (anyone can do this):**
+1. Tap **Download Android APK** above (or open [Releases](https://github.com/nvaltryek-001/Travel_Plan/releases/latest) and download `TravelPlan.apk` — it's free and public).
+2. Open the file on your phone → allow **Install unknown apps** when asked → **Install**.
+3. Open **Travel Plan** → log in with the demo account below (or **Sign Up** for your own) → start planning.
+
+**💻 Or use it instantly in any browser:** just open the [**web app**](https://nvaltryek-001.github.io/Travel_Plan/) — nothing to install.
+
+> 🔄 Every push to `main` automatically builds a fresh APK and redeploys the web app with **GitHub Actions** ([workflow](.github/workflows/build-and-deploy.yml)), so the download link always serves the latest version.
 
 ---
 
@@ -121,7 +125,7 @@ sequenceDiagram
     participant U as 👤 User
     participant App as 📱 Travel Plan
     participant GPS as 📍 Geolocator
-    participant AI as 🤖 Gemini 2.5 Flash
+    participant AI as 🤖 Gemini
     participant DB as 🔥 Firestore
     participant W as ⛅ OpenWeather
 
@@ -157,7 +161,7 @@ sequenceDiagram
 | | Feature | Details |
 |---|---|---|
 | 🔐 | **Authentication** | Firebase email/password, email verification, OTP password reset |
-| 🤖 | **AI Trip Planner** | Gemini 2.5 Flash, structured JSON output, budget-aware |
+| 🤖 | **AI Trip Planner** | Google Gemini, structured JSON output, budget-aware, fast |
 | 🚗 | **Vehicle-aware** | Bike / Car / EV, with fuel stations or EV charging stops |
 | 💸 | **Cost Estimate** | Fuel, food, stay and activities in INR |
 | 🛡️ | **Smart Advisor** | Rain-safety routes, traffic timing, budget tips |
@@ -190,7 +194,7 @@ sequenceDiagram
 | Layer | Tech |
 |---|---|
 | UI | Flutter · Material 3 · Google Fonts (Poppins) |
-| AI | `google_generative_ai`, Gemini 2.5 Flash |
+| AI | `google_generative_ai`, Gemini (flash-lite, fast responses ~3–5s) |
 | Auth & DB | Firebase Auth · Cloud Firestore |
 | Location | `geolocator` · `geocoding` |
 | Weather | OpenWeatherMap REST API (`http`) |
