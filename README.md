@@ -289,6 +289,6 @@ For anything related to this project — questions, feedback or support:
 
 ## 🙏 Credits
 
-Built on [smart_travel_app](https://github.com/itsvishwasj/smart_travel_app) by **itsvishwasj**, extended with new features, a redesigned UI, dark mode, secure key handling and full documentation.
+ a redesigned UI, dark mode, secure key handling and full documentation.
 
 <p align="center">Made with ❤️ and Flutter</p>
